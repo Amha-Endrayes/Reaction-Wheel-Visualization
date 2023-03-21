@@ -12,36 +12,34 @@
 script = ExtResource("1_xxq55")
 
 [node name="base" parent="." instance=ExtResource("1_jxnbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0)
 
 [node name="wheel1" type="Node3D" parent="." groups=["wheel"]]
-transform = Transform3D(1, 0, 0, 0, 0.848048, -0.529919, 0, 0.529919, 0.848048, -1.2615, 1.4606, 0.319901)
+transform = Transform3D(1, 0, 0, 0, 0.848048, -0.529919, 0, 0.529919, 0.848048, -1.2615, 0.6606, 0.319901)
 rotation_edit_mode = 2
 script = ExtResource("3_k8xaf")
-rpm = -40.0
+velocity = 100.0
 
 [node name="wheel1_model" parent="wheel1" instance=ExtResource("2_7bbpg")]
 transform = Transform3D(1, 0, 0, 0, 0.848048, 0.529919, 0, -0.529919, 0.848048, 1.2615, -1.40818, 0.502707)
 
 [node name="wheel2" type="Node3D" parent="." groups=["wheel"]]
-transform = Transform3D(-4.37114e-08, 0.529919, 0.848048, 0, 0.848048, -0.529919, -1, -2.31635e-08, -3.70694e-08, 0.31072, 1.46108, 1.26162)
+transform = Transform3D(-4.37114e-08, 0.529919, 0.848048, 0, 0.848048, -0.529919, -1, -2.31635e-08, -3.70694e-08, 0.31072, 0.66108, 1.26162)
 script = ExtResource("3_k8xaf")
-rpm = 0.0
 
 [node name="wheel2_model" parent="wheel2" instance=ExtResource("3_i4bun")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0.529919, 0.848048, -2.31635e-08, 0.848048, -0.529919, -3.70694e-08, 1.26162, -1.40373, 0.51075)
 
 [node name="wheel3" type="Node3D" parent="." groups=["wheel"]]
-transform = Transform3D(-1, 4.6327e-08, 7.41387e-08, 0, 0.848048, -0.529919, -8.74228e-08, -0.529919, -0.848048, 1.2626, 1.45715, -0.320415)
+transform = Transform3D(-1, 4.6327e-08, 7.41387e-08, 0, 0.848048, -0.529919, -8.74228e-08, -0.529919, -0.848048, 1.2626, 0.65715, -0.320415)
 script = ExtResource("3_k8xaf")
-rpm = 0.0
 
 [node name="wheel3_model" parent="wheel3" instance=ExtResource("4_fogof")]
 transform = Transform3D(-1, 0, -8.74228e-08, 4.6327e-08, 0.848048, -0.529919, 7.41387e-08, -0.529919, -0.848048, 1.2626, -1.40553, 0.500446)
 
 [node name="wheel4" type="Node3D" parent="." groups=["wheel"]]
-transform = Transform3D(-4.37114e-08, -0.529919, -0.848048, 0, 0.848048, -0.529919, 1, -2.31635e-08, -3.70694e-08, -0.324512, 1.4571, -1.25987)
+transform = Transform3D(-4.37114e-08, -0.529919, -0.848048, 0, 0.848048, -0.529919, 1, -2.31635e-08, -3.70694e-08, -0.324512, 0.6571, -1.25987)
 script = ExtResource("3_k8xaf")
-rpm = 0.0
 
 [node name="wheel4_model" parent="wheel4" instance=ExtResource("5_s3a6f")]
 transform = Transform3D(-4.37114e-08, 0, 1, -0.529919, 0.848048, -2.31635e-08, -0.848048, -0.529919, -3.70694e-08, 1.25987, -1.40766, 0.496943)

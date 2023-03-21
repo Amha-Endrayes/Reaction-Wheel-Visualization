@@ -1,23 +1,27 @@
 extends Node3D
 
-@export var rpm: float = 4.0
-const inertia: float = 1.0
+const inertia: float = 1.0 # kg * m^2
+const max_velocity: float = 40.0 # rad/s
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+@export var velocity: float = 0.0 # rad / s
+@export var acceleration: float = 0.0 # rad / s^2
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	velocity += acceleration;
+	if abs(velocity) > max_velocity:
+		velocity = clamp(velocity, -max_velocity, max_velocity)
+		acceleration = 0
 	animate(delta)
 
 
 func animate(delta):
-	rotate_object_local(Vector3(0, 0, 1), rads_per_sec() * delta)
+	rotate_object_local(Vector3(0, 0, 1), velocity * delta)
 
 func get_momentum() -> Vector3:
-	return rads_per_sec() * inertia * get_global_transform().basis.z;
+	return velocity * inertia * get_global_transform().basis.z;
 
-func rads_per_sec() -> float:
-	return 0.1047198 * rpm
+	
+func rpm() -> float:
+	return 9.5492968 * velocity

@@ -34,7 +34,7 @@ func _process(_delta):
 func _draw():
 	for vector in vectors:
 		vector.draw(self, get_viewport().get_camera_3d())
-	vectors.clear()
+	#vectors.clear()
 
 
 func draw_vector(pos: Vector3, dir: Vector3, color: Color):

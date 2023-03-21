@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 DebugDraw="*res://DebugDraw.gd"
 
+[editor]
+
+movie_writer/movie_file="/storage/Documents/Godot/ReactionWheels/out.avi"
+movie_writer/fps=30
+
 [input]
 
 "Left Click"={
