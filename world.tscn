@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dfyqnvtu6mank"]
+[gd_scene load_steps=7 format=3 uid="uid://dfyqnvtu6mank"]
 
 [ext_resource type="Texture2D" uid="uid://bticauqhtnqoi" path="res://models/starmap_8k.jpg" id="1_wj1c1"]
+[ext_resource type="Script" path="res://world.gd" id="2_84njd"]
 [ext_resource type="PackedScene" uid="uid://b7cygqcjty0y4" path="res://cube_sat.tscn" id="2_w2af2"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_tvcqa"]
@@ -16,13 +17,17 @@ sky = SubResource("Sky_cwi6a")
 
 [node name="World" type="WorldEnvironment"]
 environment = SubResource("Environment_crkvp")
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.728658, 0.684878, 0, -0.684878, 0.728658, 0, 4.03251, 4.33441)
-current = true
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 0.997819, -0.0660129, 0, 0.0660129, 0.997819, 0, -0.0163116, 0.120244)
+script = ExtResource("2_84njd")
 
 [node name="CubeSat" parent="." instance=ExtResource("2_w2af2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0125639)
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Camera" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.235759, -0.282455, 7.13333)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="CameraPivot/Camera"]
+transform = Transform3D(1, 0, 0, 0, 0.997819, -0.0660129, 0, 0.0660129, 0.997819, 0, -0.0163116, 0.120244)

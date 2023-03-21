@@ -37,6 +37,6 @@ func _draw():
 	vectors.clear()
 
 
-func draw_vector(pos: Vector3, dir: Vector3):
-	vectors.push_back(Vector.new(pos, dir, Color(0, 1, 0), 2))
+func draw_vector(pos: Vector3, dir: Vector3, color: Color):
+	vectors.push_back(Vector.new(pos, dir, color, 2))
 	

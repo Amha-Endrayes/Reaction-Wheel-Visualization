@@ -1,5 +1,6 @@
 extends Node3D
 
+var net_momentum = Vector3(0, 0, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,8 +16,8 @@ func get_wheel_momentum():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	rotate(Vector3(0, 0, 1), -1.0 * delta)
+	var body_momentum = net_momentum - get_wheel_momentum()
+	if not body_momentum.is_zero_approx():
+		rotate(body_momentum.normalized(), delta * body_momentum.length())
 	
-	DebugDraw.draw_vector(global_position, get_wheel_momentum() * 0.5)
-
-
+	DebugDraw.draw_vector(global_position, body_momentum * 0.5, Color.GREEN)
