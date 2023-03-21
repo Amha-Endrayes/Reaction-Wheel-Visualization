@@ -11,13 +11,14 @@ sky_material = SubResource("PanoramaSkyMaterial_tvcqa")
 
 [sub_resource type="Environment" id="Environment_crkvp"]
 background_mode = 2
+background_energy_multiplier = 4.0
 sky = SubResource("Sky_cwi6a")
 
 [node name="World" type="WorldEnvironment"]
 environment = SubResource("Environment_crkvp")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.861594, 0.507599, 0, -0.507599, 0.861594, 0, 2.73016, 4.33441)
+transform = Transform3D(1, 0, 0, 0, 0.728658, 0.684878, 0, -0.684878, 0.728658, 0, 4.03251, 4.33441)
 current = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera3D"]
