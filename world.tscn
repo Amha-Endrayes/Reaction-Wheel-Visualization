@@ -20,8 +20,8 @@ environment = SubResource("Environment_crkvp")
 transform = Transform3D(1, 0, 0, 0, 0.861594, 0.507599, 0, -0.507599, 0.861594, 0, 2.73016, 4.33441)
 current = true
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.997819, -0.0660129, 0, 0.0660129, 0.997819, 0, -0.0163116, 0.120244)
+
 [node name="CubeSat" parent="." instance=ExtResource("2_w2af2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0125639)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.83022, 0)

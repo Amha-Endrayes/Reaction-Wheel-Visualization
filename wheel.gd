@@ -1,7 +1,7 @@
 extends Node3D
 
-@export var axis: Vector3
-const angle: float = deg_to_rad(32)
+@export var rpm: float = 1.0
+const inertia: float = 1.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -10,8 +10,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	animate()
+	animate(delta)
 
 
-func animate():
-	rotate_object_local(Vector3(0, 0, 1), 0.05)
+func animate(delta):
+	rotate_object_local(Vector3(0, 0, 1), rpm * delta)
