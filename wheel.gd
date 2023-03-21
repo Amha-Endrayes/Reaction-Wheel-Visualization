@@ -14,7 +14,10 @@ func _process(delta):
 
 
 func animate(delta):
-	rotate_object_local(Vector3(0, 0, 1), rpm * delta)
+	rotate_object_local(Vector3(0, 0, 1), rads_per_sec() * delta)
 
 func get_momentum() -> Vector3:
-	return (0.1047198 * rpm) * inertia * to_global(basis.z);
+	return rads_per_sec() * inertia * get_global_transform().basis.z;
+
+func rads_per_sec() -> float:
+	return 0.1047198 * rpm
