@@ -1,8 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://dfyqnvtu6mank"]
+[gd_scene load_steps=19 format=3 uid="uid://dfyqnvtu6mank"]
 
 [ext_resource type="Texture2D" uid="uid://bticauqhtnqoi" path="res://models/starmap_8k.jpg" id="1_wj1c1"]
 [ext_resource type="Script" path="res://world.gd" id="2_84njd"]
+[ext_resource type="Script" path="res://main view.gd" id="3_71oba"]
 [ext_resource type="Script" path="res://cube_sat.gd" id="3_u3n3o"]
+[ext_resource type="Script" path="res://NetVector.gd" id="3_ub5rn"]
 [ext_resource type="PackedScene" uid="uid://dxic8waqchc3t" path="res://models/base.glb" id="4_ebyt2"]
 [ext_resource type="Script" path="res://WheelSliders.gd" id="4_hgbox"]
 [ext_resource type="Script" path="res://wheel.gd" id="5_dcxpo"]
@@ -11,6 +13,11 @@
 [ext_resource type="PackedScene" uid="uid://wyem8uhw5svt" path="res://models/wheel2.glb" id="7_d23cs"]
 [ext_resource type="PackedScene" uid="uid://bt08pw46fj85o" path="res://models/wheel3.glb" id="8_jnql3"]
 [ext_resource type="PackedScene" uid="uid://4d82d6kch12" path="res://models/wheel4.glb" id="9_1451l"]
+
+[sub_resource type="SystemFont" id="SystemFont_7s676"]
+
+[sub_resource type="Theme" id="Theme_baonx"]
+default_font = SubResource("SystemFont_7s676")
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_tvcqa"]
 panorama = ExtResource("1_wj1c1")
@@ -23,66 +30,140 @@ background_mode = 2
 background_energy_multiplier = 4.0
 sky = SubResource("Sky_cwi6a")
 
-[node name="World" type="WorldEnvironment"]
+[node name="HSplitContainer" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_baonx")
+
+[node name="ItemList" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="WheelSliders" type="VBoxContainer" parent="ItemList" node_paths=PackedStringArray("wheels")]
+layout_mode = 2
+script = ExtResource("4_hgbox")
+wheel_slider = ExtResource("6_ixj40")
+wheels = NodePath("../../main view/SubViewport/World/CubeSat/wheels")
+
+[node name="NetVector" type="HBoxContainer" parent="ItemList" node_paths=PackedStringArray("cubesat")]
+layout_mode = 2
+script = ExtResource("3_ub5rn")
+cubesat = NodePath("../../main view/SubViewport/World/CubeSat")
+
+[node name="Label" type="Label" parent="ItemList/NetVector"]
+layout_mode = 2
+text = "Net Momentum Vector"
+
+[node name="X" type="SpinBox" parent="ItemList/NetVector"]
+layout_mode = 2
+min_value = -20.0
+max_value = 20.0
+step = 0.1
+
+[node name="Y" type="SpinBox" parent="ItemList/NetVector"]
+layout_mode = 2
+min_value = -20.0
+max_value = 20.0
+step = 0.1
+
+[node name="Z" type="SpinBox" parent="ItemList/NetVector"]
+layout_mode = 2
+min_value = -20.0
+max_value = 20.0
+step = 0.1
+
+[node name="Randomize" type="Button" parent="ItemList/NetVector"]
+layout_mode = 2
+text = "Disturb"
+
+[node name="PID UI" type="HBoxContainer" parent="ItemList"]
+layout_mode = 2
+
+[node name="P" type="Label" parent="ItemList/PID UI"]
+layout_mode = 2
+text = "P"
+
+[node name="Proportional" type="SpinBox" parent="ItemList/PID UI"]
+layout_mode = 2
+
+[node name="I" type="Label" parent="ItemList/PID UI"]
+layout_mode = 2
+text = "I"
+
+[node name="Integral" type="SpinBox" parent="ItemList/PID UI"]
+layout_mode = 2
+
+[node name="D" type="Label" parent="ItemList/PID UI"]
+layout_mode = 2
+text = "D"
+
+[node name="Derivative" type="SpinBox" parent="ItemList/PID UI"]
+layout_mode = 2
+
+[node name="main view" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+script = ExtResource("3_71oba")
+
+[node name="SubViewport" type="SubViewport" parent="main view"]
+handle_input_locally = false
+size = Vector2i(100, 100)
+render_target_update_mode = 4
+
+[node name="World" type="WorldEnvironment" parent="main view/SubViewport"]
 environment = SubResource("Environment_crkvp")
 script = ExtResource("2_84njd")
 
-[node name="CubeSat" type="Node3D" parent="."]
+[node name="CubeSat" type="Node3D" parent="main view/SubViewport/World"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0125639)
 script = ExtResource("3_u3n3o")
 
-[node name="base" parent="CubeSat" instance=ExtResource("4_ebyt2")]
+[node name="base" parent="main view/SubViewport/World/CubeSat" instance=ExtResource("4_ebyt2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0)
 
-[node name="wheels" type="Node3D" parent="CubeSat"]
+[node name="wheels" type="Node3D" parent="main view/SubViewport/World/CubeSat"]
 
-[node name="wheel1" type="Node3D" parent="CubeSat/wheels" groups=["wheel"]]
+[node name="wheel1" type="Node3D" parent="main view/SubViewport/World/CubeSat/wheels" groups=["wheel"]]
 transform = Transform3D(1, 0, 0, 0, 0.848048, -0.529919, 0, 0.529919, 0.848048, -1.2615, 0.6606, 0.319901)
 rotation_edit_mode = 2
 script = ExtResource("5_dcxpo")
 
-[node name="wheel1_model" parent="CubeSat/wheels/wheel1" instance=ExtResource("6_fbovo")]
+[node name="wheel1_model" parent="main view/SubViewport/World/CubeSat/wheels/wheel1" instance=ExtResource("6_fbovo")]
 transform = Transform3D(1, 0, 0, 0, 0.848048, 0.529919, 0, -0.529919, 0.848048, 1.2615, -1.40818, 0.502707)
 
-[node name="wheel2" type="Node3D" parent="CubeSat/wheels" groups=["wheel"]]
+[node name="wheel2" type="Node3D" parent="main view/SubViewport/World/CubeSat/wheels" groups=["wheel"]]
 transform = Transform3D(-4.37114e-08, 0.529919, 0.848048, 0, 0.848048, -0.529919, -1, -2.31635e-08, -3.70694e-08, 0.31072, 0.66108, 1.26162)
 script = ExtResource("5_dcxpo")
 
-[node name="wheel2_model" parent="CubeSat/wheels/wheel2" instance=ExtResource("7_d23cs")]
+[node name="wheel2_model" parent="main view/SubViewport/World/CubeSat/wheels/wheel2" instance=ExtResource("7_d23cs")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0.529919, 0.848048, -2.31635e-08, 0.848048, -0.529919, -3.70694e-08, 1.26162, -1.40373, 0.51075)
 
-[node name="wheel3" type="Node3D" parent="CubeSat/wheels" groups=["wheel"]]
+[node name="wheel3" type="Node3D" parent="main view/SubViewport/World/CubeSat/wheels" groups=["wheel"]]
 transform = Transform3D(-1, 4.6327e-08, 7.41387e-08, 0, 0.848048, -0.529919, -8.74228e-08, -0.529919, -0.848048, 1.2626, 0.65715, -0.320415)
 script = ExtResource("5_dcxpo")
 
-[node name="wheel3_model" parent="CubeSat/wheels/wheel3" instance=ExtResource("8_jnql3")]
+[node name="wheel3_model" parent="main view/SubViewport/World/CubeSat/wheels/wheel3" instance=ExtResource("8_jnql3")]
 transform = Transform3D(-1, 0, -8.74228e-08, 4.6327e-08, 0.848048, -0.529919, 7.41387e-08, -0.529919, -0.848048, 1.2626, -1.40553, 0.500446)
 
-[node name="wheel4" type="Node3D" parent="CubeSat/wheels" groups=["wheel"]]
+[node name="wheel4" type="Node3D" parent="main view/SubViewport/World/CubeSat/wheels" groups=["wheel"]]
 transform = Transform3D(-4.37114e-08, -0.529919, -0.848048, 0, 0.848048, -0.529919, 1, -2.31635e-08, -3.70694e-08, -0.324512, 0.6571, -1.25987)
 script = ExtResource("5_dcxpo")
 
-[node name="wheel4_model" parent="CubeSat/wheels/wheel4" instance=ExtResource("9_1451l")]
+[node name="wheel4_model" parent="main view/SubViewport/World/CubeSat/wheels/wheel4" instance=ExtResource("9_1451l")]
 transform = Transform3D(-4.37114e-08, 0, 1, -0.529919, 0.848048, -2.31635e-08, -0.848048, -0.529919, -3.70694e-08, 1.25987, -1.40766, 0.496943)
 
-[node name="CameraPivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="CameraPivot" type="Node3D" parent="main view/SubViewport/World"]
 
-[node name="Camera" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.235759, -0.282455, 7.13333)
+[node name="Camera" type="Camera3D" parent="main view/SubViewport/World/CameraPivot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.234)
 current = true
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="CameraPivot/Camera"]
-transform = Transform3D(1, 0, 0, 0, 0.997819, -0.0660129, 0, 0.0660129, 0.997819, 0, -0.0163116, 0.688179)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="main view/SubViewport/World/CameraPivot/Camera"]
+transform = Transform3D(1, 0, 0, 0, 0.997819, -0.0660129, 0, 0.0660129, 0.997819, 0, 0, 0.688)
 
-[node name="Control" type="Panel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="WheelSliders" type="VBoxContainer" parent="Control" node_paths=PackedStringArray("wheels")]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("4_hgbox")
-wheel_slider = ExtResource("6_ixj40")
-wheels = NodePath("../../CubeSat/wheels")
+[connection signal="pressed" from="ItemList/NetVector/Randomize" to="ItemList/NetVector" method="_on_randomize_pressed"]

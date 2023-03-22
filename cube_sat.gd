@@ -12,7 +12,6 @@ func get_wheel_momentum():
 	return momentum
 
 
-var count = 0
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var body_momentum = net_momentum - get_wheel_momentum()
@@ -20,8 +19,14 @@ func _process(delta):
 	if not body_velocity.is_zero_approx():
 		rotate(body_velocity.normalized(), delta * body_velocity.length())
 	
-	count += delta
-	if count > 0.1:
-		DebugDraw.draw_vector(global_position, body_velocity * 0.5, Color.GREEN)
-		count = 0
-		#DebugDraw.draw_vector(global_position, get_wheel_momentum() * 0.5, Color.PINK)
+	DebugDraw.draw_vector(global_position, body_velocity * 0.5, Color.GREEN)
+	
+	pid()
+
+
+func apply_torque(torque: Vector3):
+	for wheel in get_tree().get_nodes_in_group("wheel"):
+		wheel.acceleration = -torque.dot(wheel.get_direction())
+
+func pid():
+	apply_torque(-10.0 * body_velocity)

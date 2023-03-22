@@ -1,12 +1,13 @@
 extends HBoxContainer
 
-var wheel: Node
+var wheel: Node3D
 
 func init(_wheel: Node):
 	wheel = _wheel
 	$ID.text = wheel.name
 	$Indicator.min_value = -wheel.max_velocity
 	$Indicator.max_value = wheel.max_velocity
+	display_velocity()
 
 
 func _process(delta):
@@ -22,13 +23,17 @@ func display_velocity():
 
 
 func _on_plus_button_down():
-	wheel.acceleration = 0.1 # Replace with function body.
+	wheel.acceleration = wheel.max_torque  /wheel.inertia
 
 func _on_minus_button_down():
-	wheel.acceleration = -0.1 
+	wheel.acceleration = -wheel.max_torque / wheel.inertia
 	
 func _on_minus_button_up():
 	wheel.acceleration = 0 # Replace with function body.
 
 func _on_plus_button_up():
 	wheel.acceleration = 0 # Replace with function body.
+
+
+func _on_disable_toggled(button_pressed):
+	wheel.enabled = button_pressed

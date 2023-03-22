@@ -13,9 +13,12 @@ layout_mode = 2
 [node name="Indicator" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 1
 show_percentage = false
+
+[node name="RPM" type="Label" parent="."]
+layout_mode = 2
+text = "RPM: "
 
 [node name="Minus" type="Button" parent="."]
 layout_mode = 2
@@ -25,11 +28,13 @@ text = "<-"
 layout_mode = 2
 text = "->"
 
-[node name="RPM" type="Label" parent="."]
+[node name="Disable" type="CheckBox" parent="."]
 layout_mode = 2
-text = "RPM: "
+button_pressed = true
+text = "Enabled"
 
 [connection signal="button_down" from="Minus" to="." method="_on_minus_button_down"]
 [connection signal="button_up" from="Minus" to="." method="_on_minus_button_up"]
 [connection signal="button_down" from="Plus" to="." method="_on_plus_button_down"]
 [connection signal="button_up" from="Plus" to="." method="_on_plus_button_up"]
+[connection signal="toggled" from="Disable" to="." method="_on_disable_toggled"]
