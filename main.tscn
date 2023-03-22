@@ -1,11 +1,15 @@
-[gd_scene load_steps=19 format=3 uid="uid://djkcpb115y0ve"]
+[gd_scene load_steps=23 format=3 uid="uid://djkcpb115y0ve"]
 
 [ext_resource type="Script" path="res://wheels_ui.gd" id="1_iliwq"]
 [ext_resource type="PackedScene" uid="uid://c67ruvyiuhsk2" path="res://wheel_ui.tscn" id="2_kuy7v"]
 [ext_resource type="Script" path="res://disturbance_UI.gd" id="3_ehlyn"]
+[ext_resource type="Script" path="res://PID_UI.gd" id="4_0j3tq"]
 [ext_resource type="Script" path="res://sim_view.gd" id="4_d5qmn"]
+[ext_resource type="Script" path="res://error.gd" id="5_fh2i5"]
 [ext_resource type="Texture2D" uid="uid://bticauqhtnqoi" path="res://assets/starmap_8k.jpg" id="5_l1m2g"]
 [ext_resource type="Script" path="res://cube_sat.gd" id="6_p3hl7"]
+[ext_resource type="Script" path="res://target_ui.gd" id="6_yk7vs"]
+[ext_resource type="Script" path="res://camera_ui.gd" id="7_ki5oa"]
 [ext_resource type="Script" path="res://physics.gd" id="7_y2bsf"]
 [ext_resource type="PackedScene" uid="uid://dxic8waqchc3t" path="res://assets/base.glb" id="8_yffpw"]
 [ext_resource type="Script" path="res://wheel.gd" id="9_j7yxd"]
@@ -39,69 +43,168 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_baonx")
 
-[node name="UserInterface" type="VBoxContainer" parent="."]
+[node name="UserInterface" type="ScrollContainer" parent="."]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="UserInterface"]
 layout_mode = 2
 
-[node name="WheelsUI" type="VBoxContainer" parent="UserInterface" node_paths=PackedStringArray("wheels")]
+[node name="WheelsUI" type="VBoxContainer" parent="UserInterface/List" node_paths=PackedStringArray("wheels")]
 layout_mode = 2
 script = ExtResource("1_iliwq")
 wheel_slider = ExtResource("2_kuy7v")
-wheels = NodePath("../../SimView/View/World/CubeSat/Physics/Wheels")
+wheels = NodePath("../../../SimView/View/World/CubeSat/Physics/Wheels")
 
-[node name="DisturbanceUI" type="HBoxContainer" parent="UserInterface" node_paths=PackedStringArray("cubesat")]
+[node name="HSeparator" type="HSeparator" parent="UserInterface/List"]
+layout_mode = 2
+
+[node name="DisturbanceUI" type="HBoxContainer" parent="UserInterface/List" node_paths=PackedStringArray("physics")]
 layout_mode = 2
 script = ExtResource("3_ehlyn")
-cubesat = NodePath("../../SimView/View/World/CubeSat/Physics")
+physics = NodePath("../../../SimView/View/World/CubeSat/Physics")
 
-[node name="Label" type="Label" parent="UserInterface/DisturbanceUI"]
+[node name="Label" type="Label" parent="UserInterface/List/DisturbanceUI"]
 layout_mode = 2
 text = "Net Momentum Vector"
 
-[node name="X" type="SpinBox" parent="UserInterface/DisturbanceUI"]
+[node name="X" type="SpinBox" parent="UserInterface/List/DisturbanceUI"]
 layout_mode = 2
 min_value = -20.0
 max_value = 20.0
 step = 0.1
 
-[node name="Y" type="SpinBox" parent="UserInterface/DisturbanceUI"]
+[node name="Y" type="SpinBox" parent="UserInterface/List/DisturbanceUI"]
 layout_mode = 2
 min_value = -20.0
 max_value = 20.0
 step = 0.1
 
-[node name="Z" type="SpinBox" parent="UserInterface/DisturbanceUI"]
+[node name="Z" type="SpinBox" parent="UserInterface/List/DisturbanceUI"]
 layout_mode = 2
 min_value = -20.0
 max_value = 20.0
 step = 0.1
 
-[node name="Randomize" type="Button" parent="UserInterface/DisturbanceUI"]
+[node name="Randomize" type="Button" parent="UserInterface/List/DisturbanceUI"]
 layout_mode = 2
 text = "Disturb"
 
-[node name="PIDUI" type="HBoxContainer" parent="UserInterface"]
+[node name="HSeparator2" type="HSeparator" parent="UserInterface/List"]
 layout_mode = 2
 
-[node name="P" type="Label" parent="UserInterface/PIDUI"]
+[node name="PIDUI" type="HBoxContainer" parent="UserInterface/List" node_paths=PackedStringArray("cubesat")]
+layout_mode = 2
+script = ExtResource("4_0j3tq")
+cubesat = NodePath("../../../SimView/View/World/CubeSat")
+
+[node name="P" type="Label" parent="UserInterface/List/PIDUI"]
 layout_mode = 2
 text = "P"
 
-[node name="Proportional" type="SpinBox" parent="UserInterface/PIDUI"]
+[node name="Proportional" type="SpinBox" parent="UserInterface/List/PIDUI"]
 layout_mode = 2
+step = 0.1
+value = 10.0
 
-[node name="I" type="Label" parent="UserInterface/PIDUI"]
+[node name="I" type="Label" parent="UserInterface/List/PIDUI"]
 layout_mode = 2
 text = "I"
 
-[node name="Integral" type="SpinBox" parent="UserInterface/PIDUI"]
+[node name="Integral" type="SpinBox" parent="UserInterface/List/PIDUI"]
 layout_mode = 2
+step = 0.1
 
-[node name="D" type="Label" parent="UserInterface/PIDUI"]
+[node name="D" type="Label" parent="UserInterface/List/PIDUI"]
 layout_mode = 2
 text = "D"
 
-[node name="Derivative" type="SpinBox" parent="UserInterface/PIDUI"]
+[node name="Derivative" type="SpinBox" parent="UserInterface/List/PIDUI"]
 layout_mode = 2
+step = 0.1
+value = 10.0
+
+[node name="Enabled" type="CheckBox" parent="UserInterface/List/PIDUI"]
+layout_mode = 2
+
+[node name="Error" type="Label" parent="UserInterface/List" node_paths=PackedStringArray("cubesat")]
+layout_mode = 2
+text = "Error: 0"
+script = ExtResource("5_fh2i5")
+cubesat = NodePath("../../../SimView/View/World/CubeSat")
+
+[node name="HSeparator4" type="HSeparator" parent="UserInterface/List"]
+layout_mode = 2
+
+[node name="TargetUI" type="HBoxContainer" parent="UserInterface/List" node_paths=PackedStringArray("physics")]
+layout_mode = 2
+script = ExtResource("6_yk7vs")
+physics = NodePath("../../../SimView/View/World/CubeSat/Physics")
+
+[node name="Label" type="Label" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+text = "Target"
+
+[node name="VSeparator" type="VSeparator" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+
+[node name="XLabel" type="Label" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+text = "X"
+
+[node name="X" type="SpinBox" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="YLabel" type="Label" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+text = "Y"
+
+[node name="Y" type="SpinBox" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+
+[node name="ZLabel" type="Label" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+text = "Z"
+
+[node name="Z" type="SpinBox" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+
+[node name="SetButton" type="Button" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+text = "Set"
+
+[node name="Randomize" type="Button" parent="UserInterface/List/TargetUI"]
+layout_mode = 2
+text = "Randomize"
+
+[node name="HSeparator5" type="HSeparator" parent="UserInterface/List"]
+layout_mode = 2
+
+[node name="CameraUI" type="CheckButton" parent="UserInterface/List"]
+layout_mode = 2
+text = "Onboard Camera"
+script = ExtResource("7_ki5oa")
+
+[node name="HSeparator6" type="HSeparator" parent="UserInterface/List"]
+layout_mode = 2
+
+[node name="Explanation" type="RichTextLabel" parent="UserInterface/List"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=red]Red arrow[/color] - Target
+[color=green]Green arrow[/color] - Body angular momentum"
+fit_content = true
+scroll_active = false
 
 [node name="SimView" type="SubViewportContainer" parent="."]
 custom_minimum_size = Vector2(100, 100)
@@ -112,7 +215,7 @@ script = ExtResource("4_d5qmn")
 
 [node name="View" type="SubViewport" parent="SimView"]
 handle_input_locally = false
-size = Vector2i(639, 648)
+size = Vector2i(631, 648)
 render_target_update_mode = 4
 
 [node name="World" type="WorldEnvironment" parent="SimView/View"]
@@ -135,6 +238,7 @@ directional_shadow_mode = 0
 script = ExtResource("6_p3hl7")
 
 [node name="Physics" type="Node3D" parent="SimView/View/World/CubeSat"]
+unique_name_in_owner = true
 script = ExtResource("7_y2bsf")
 
 [node name="Base" parent="SimView/View/World/CubeSat/Physics" instance=ExtResource("8_yffpw")]
@@ -171,4 +275,16 @@ script = ExtResource("9_j7yxd")
 [node name="wheel4_model" parent="SimView/View/World/CubeSat/Physics/Wheels/Wheel4" instance=ExtResource("13_roewg")]
 transform = Transform3D(-4.37114e-08, 0, 1, -0.529919, 0.848048, -2.31635e-08, -0.848048, -0.529919, -3.70694e-08, 1.25987, -1.40766, 0.496943)
 
-[connection signal="pressed" from="UserInterface/DisturbanceUI/Randomize" to="UserInterface/DisturbanceUI" method="_on_randomize_pressed"]
+[node name="OnboardCamera" type="Camera3D" parent="SimView/View/World/CubeSat/Physics"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -8.41399, 0)
+cull_mask = 1048574
+
+[connection signal="pressed" from="UserInterface/List/DisturbanceUI/Randomize" to="UserInterface/List/DisturbanceUI" method="_on_randomize_pressed"]
+[connection signal="value_changed" from="UserInterface/List/PIDUI/Proportional" to="UserInterface/List/PIDUI" method="update" unbinds=1]
+[connection signal="value_changed" from="UserInterface/List/PIDUI/Integral" to="UserInterface/List/PIDUI" method="update" unbinds=1]
+[connection signal="value_changed" from="UserInterface/List/PIDUI/Derivative" to="UserInterface/List/PIDUI" method="update" unbinds=1]
+[connection signal="toggled" from="UserInterface/List/PIDUI/Enabled" to="UserInterface/List/PIDUI" method="update" unbinds=1]
+[connection signal="pressed" from="UserInterface/List/TargetUI/SetButton" to="UserInterface/List/TargetUI" method="_on_set_button_pressed"]
+[connection signal="pressed" from="UserInterface/List/TargetUI/Randomize" to="UserInterface/List/TargetUI" method="_on_randomize_pressed"]
+[connection signal="toggled" from="UserInterface/List/CameraUI" to="UserInterface/List/CameraUI" method="_on_toggled"]

@@ -3,13 +3,12 @@ extends SubViewportContainer
 # Draws all the vectors in DebugDraw
 # Handles camera movement
 
-
-func _process(delta):
+func _process(_delta):
 	queue_redraw()
 
 func _draw():
 	for vector in DebugDraw.vectors:
-		vector.draw(self, %Camera)
+		vector.draw(self, $View.get_camera_3d())
 	DebugDraw.vectors.clear()
 
 func _input(event):

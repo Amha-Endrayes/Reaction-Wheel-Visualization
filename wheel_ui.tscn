@@ -16,10 +16,6 @@ layout_mode = 2
 size_flags_vertical = 1
 show_percentage = false
 
-[node name="RPM" type="Label" parent="."]
-layout_mode = 2
-text = "RPM: "
-
 [node name="Minus" type="Button" parent="."]
 layout_mode = 2
 text = "<-"
@@ -31,7 +27,10 @@ text = "->"
 [node name="Disable" type="CheckBox" parent="."]
 layout_mode = 2
 button_pressed = true
-text = "Enabled"
+
+[node name="RPM" type="Label" parent="."]
+layout_mode = 2
+text = "RPM: "
 
 [connection signal="button_down" from="Minus" to="." method="_on_minus_button_down"]
 [connection signal="button_up" from="Minus" to="." method="_on_minus_button_up"]

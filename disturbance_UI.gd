@@ -2,15 +2,15 @@ extends HBoxContainer
 # Controls the net momentum of the satellite
 # Randomizes disturbances
 
-@export var cubesat: Node3D
+@export var physics: Node3D
 
-func _input(event):
+func _input(_event):
 	update()
 
 func update():
-	cubesat.net_momentum.x = $X.value
-	cubesat.net_momentum.y = $Y.value
-	cubesat.net_momentum.z = $Z.value
+	physics.global_net_momentum.x = $X.value
+	physics.global_net_momentum.y = $Y.value
+	physics.global_net_momentum.z = $Z.value
 
 
 func _on_randomize_pressed():

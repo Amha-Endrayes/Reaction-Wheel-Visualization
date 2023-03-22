@@ -1,29 +1,38 @@
 extends Node3D
 # The physics system that governs the CubeSat's behavior
 
-
-var net_momentum = Vector3(0, 0, 0)
-var body_velocity = Vector3.ZERO
+var global_net_momentum = Vector3(0, 0, 0)
+var global_body_velocity = Vector3.ZERO
+var global_target = Vector3(1, 0, 0)
 const inertia: float = 6.0
 
-@onready var physics: Node = get_parent()
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
 
 
 func _process(delta):
-	var body_momentum = net_momentum - get_wheel_momentum()
-	body_velocity = body_momentum / inertia
-	if not body_velocity.is_zero_approx():
-		rotate(body_velocity.normalized(), delta * body_velocity.length())
+	var global_body_momentum = global_net_momentum - get_global_wheel_momentum()
+	global_body_velocity = global_body_momentum / inertia
+	if not global_body_velocity.is_zero_approx():
+		rotate(global_body_velocity.normalized(), delta * global_body_velocity.length())
 	
-	DebugDraw.draw_vector(global_position, body_velocity * 0.5, Color.GREEN)
+	DebugDraw.draw_vector(global_position, global_body_velocity * 0.5, Color.GREEN)
+	DebugDraw.draw_vector(global_position, global_target * 2, Color.RED)
 
-func get_wheel_momentum():
-	var momentum: Vector3 = Vector3.ZERO
+func get_global_wheel_momentum() -> Vector3:
+	var global_momentum: Vector3 = Vector3.ZERO
 	for wheel in get_tree().get_nodes_in_group("wheel"):
-		momentum += wheel.get_momentum()
-	return momentum
+		global_momentum += wheel.get_global_direction() * wheel.get_speed()
+	return global_momentum
+
+#### SENSORS ####
+# The CubeSat controller will call ONLY these functions to get
+# info about its surroundings.
+# TODO: Add latency and inaccuracies
+
+func get_local_body_velocity() -> Vector3:
+	return global_body_velocity * get_global_transform().basis
+
+func get_local_target() -> Vector3:
+	return global_target * get_global_transform().basis
+
+func get_local_wheel_momentum() -> Vector3:
+	return get_global_wheel_momentum() * get_global_transform().basis
