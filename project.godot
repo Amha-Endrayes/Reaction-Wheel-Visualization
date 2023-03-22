@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Reaction Wheels"
-run/main_scene="res://world.tscn"
+run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
-config/icon="res://icon.png"
+config/icon="res://assets/icon.png"
 
 [autoload]
 
-DebugDraw="*res://DebugDraw.gd"
+DebugDraw="*res://debug_draw.gd"
 
 [editor]
 

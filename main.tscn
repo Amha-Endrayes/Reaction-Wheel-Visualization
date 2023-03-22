@@ -1,0 +1,174 @@
+[gd_scene load_steps=19 format=3 uid="uid://djkcpb115y0ve"]
+
+[ext_resource type="Script" path="res://wheels_ui.gd" id="1_iliwq"]
+[ext_resource type="PackedScene" uid="uid://c67ruvyiuhsk2" path="res://wheel_ui.tscn" id="2_kuy7v"]
+[ext_resource type="Script" path="res://disturbance_UI.gd" id="3_ehlyn"]
+[ext_resource type="Script" path="res://sim_view.gd" id="4_d5qmn"]
+[ext_resource type="Texture2D" uid="uid://bticauqhtnqoi" path="res://assets/starmap_8k.jpg" id="5_l1m2g"]
+[ext_resource type="Script" path="res://cube_sat.gd" id="6_p3hl7"]
+[ext_resource type="Script" path="res://physics.gd" id="7_y2bsf"]
+[ext_resource type="PackedScene" uid="uid://dxic8waqchc3t" path="res://assets/base.glb" id="8_yffpw"]
+[ext_resource type="Script" path="res://wheel.gd" id="9_j7yxd"]
+[ext_resource type="PackedScene" uid="uid://dkc3ycisdan1s" path="res://assets/wheel1.glb" id="10_4c84b"]
+[ext_resource type="PackedScene" uid="uid://wyem8uhw5svt" path="res://assets/wheel2.glb" id="11_sra8l"]
+[ext_resource type="PackedScene" uid="uid://bt08pw46fj85o" path="res://assets/wheel3.glb" id="12_7t25e"]
+[ext_resource type="PackedScene" uid="uid://4d82d6kch12" path="res://assets/wheel4.glb" id="13_roewg"]
+
+[sub_resource type="SystemFont" id="SystemFont_7s676"]
+subpixel_positioning = 0
+
+[sub_resource type="Theme" id="Theme_baonx"]
+default_font = SubResource("SystemFont_7s676")
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_tvcqa"]
+panorama = ExtResource("5_l1m2g")
+
+[sub_resource type="Sky" id="Sky_cwi6a"]
+sky_material = SubResource("PanoramaSkyMaterial_tvcqa")
+
+[sub_resource type="Environment" id="Environment_crkvp"]
+background_mode = 2
+background_energy_multiplier = 4.0
+sky = SubResource("Sky_cwi6a")
+
+[node name="Main" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_baonx")
+
+[node name="UserInterface" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="WheelsUI" type="VBoxContainer" parent="UserInterface" node_paths=PackedStringArray("wheels")]
+layout_mode = 2
+script = ExtResource("1_iliwq")
+wheel_slider = ExtResource("2_kuy7v")
+wheels = NodePath("../../SimView/View/World/CubeSat/Physics/Wheels")
+
+[node name="DisturbanceUI" type="HBoxContainer" parent="UserInterface" node_paths=PackedStringArray("cubesat")]
+layout_mode = 2
+script = ExtResource("3_ehlyn")
+cubesat = NodePath("../../SimView/View/World/CubeSat/Physics")
+
+[node name="Label" type="Label" parent="UserInterface/DisturbanceUI"]
+layout_mode = 2
+text = "Net Momentum Vector"
+
+[node name="X" type="SpinBox" parent="UserInterface/DisturbanceUI"]
+layout_mode = 2
+min_value = -20.0
+max_value = 20.0
+step = 0.1
+
+[node name="Y" type="SpinBox" parent="UserInterface/DisturbanceUI"]
+layout_mode = 2
+min_value = -20.0
+max_value = 20.0
+step = 0.1
+
+[node name="Z" type="SpinBox" parent="UserInterface/DisturbanceUI"]
+layout_mode = 2
+min_value = -20.0
+max_value = 20.0
+step = 0.1
+
+[node name="Randomize" type="Button" parent="UserInterface/DisturbanceUI"]
+layout_mode = 2
+text = "Disturb"
+
+[node name="PIDUI" type="HBoxContainer" parent="UserInterface"]
+layout_mode = 2
+
+[node name="P" type="Label" parent="UserInterface/PIDUI"]
+layout_mode = 2
+text = "P"
+
+[node name="Proportional" type="SpinBox" parent="UserInterface/PIDUI"]
+layout_mode = 2
+
+[node name="I" type="Label" parent="UserInterface/PIDUI"]
+layout_mode = 2
+text = "I"
+
+[node name="Integral" type="SpinBox" parent="UserInterface/PIDUI"]
+layout_mode = 2
+
+[node name="D" type="Label" parent="UserInterface/PIDUI"]
+layout_mode = 2
+text = "D"
+
+[node name="Derivative" type="SpinBox" parent="UserInterface/PIDUI"]
+layout_mode = 2
+
+[node name="SimView" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+script = ExtResource("4_d5qmn")
+
+[node name="View" type="SubViewport" parent="SimView"]
+handle_input_locally = false
+size = Vector2i(639, 648)
+render_target_update_mode = 4
+
+[node name="World" type="WorldEnvironment" parent="SimView/View"]
+environment = SubResource("Environment_crkvp")
+
+[node name="CameraPivot" type="Node3D" parent="SimView/View/World"]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera3D" parent="SimView/View/World/CameraPivot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.234)
+keep_aspect = 0
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SimView/View/World/CameraPivot/Camera"]
+transform = Transform3D(1, 0, 0, 0, 0.997819, -0.0660129, 0, 0.0660129, 0.997819, 0, 0, 0.688)
+directional_shadow_mode = 0
+
+[node name="CubeSat" type="Node" parent="SimView/View/World"]
+script = ExtResource("6_p3hl7")
+
+[node name="Physics" type="Node3D" parent="SimView/View/World/CubeSat"]
+script = ExtResource("7_y2bsf")
+
+[node name="Base" parent="SimView/View/World/CubeSat/Physics" instance=ExtResource("8_yffpw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0)
+
+[node name="Wheels" type="Node3D" parent="SimView/View/World/CubeSat/Physics"]
+
+[node name="Wheel1" type="Node3D" parent="SimView/View/World/CubeSat/Physics/Wheels" groups=["wheel"]]
+transform = Transform3D(1, 0, 0, 0, 0.848048, -0.529919, 0, 0.529919, 0.848048, -1.2615, 0.6606, 0.319901)
+rotation_edit_mode = 2
+script = ExtResource("9_j7yxd")
+
+[node name="wheel1_model" parent="SimView/View/World/CubeSat/Physics/Wheels/Wheel1" instance=ExtResource("10_4c84b")]
+transform = Transform3D(1, 0, 0, 0, 0.848048, 0.529919, 0, -0.529919, 0.848048, 1.2615, -1.40818, 0.502707)
+
+[node name="Wheel2" type="Node3D" parent="SimView/View/World/CubeSat/Physics/Wheels" groups=["wheel"]]
+transform = Transform3D(-4.37114e-08, 0.529919, 0.848048, 0, 0.848048, -0.529919, -1, -2.31635e-08, -3.70694e-08, 0.31072, 0.66108, 1.26162)
+script = ExtResource("9_j7yxd")
+
+[node name="wheel2_model" parent="SimView/View/World/CubeSat/Physics/Wheels/Wheel2" instance=ExtResource("11_sra8l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0.529919, 0.848048, -2.31635e-08, 0.848048, -0.529919, -3.70694e-08, 1.26162, -1.40373, 0.51075)
+
+[node name="Wheel3" type="Node3D" parent="SimView/View/World/CubeSat/Physics/Wheels" groups=["wheel"]]
+transform = Transform3D(-1, 4.6327e-08, 7.41387e-08, 0, 0.848048, -0.529919, -8.74228e-08, -0.529919, -0.848048, 1.2626, 0.65715, -0.320415)
+script = ExtResource("9_j7yxd")
+
+[node name="wheel3_model" parent="SimView/View/World/CubeSat/Physics/Wheels/Wheel3" instance=ExtResource("12_7t25e")]
+transform = Transform3D(-1, 0, -8.74228e-08, 4.6327e-08, 0.848048, -0.529919, 7.41387e-08, -0.529919, -0.848048, 1.2626, -1.40553, 0.500446)
+
+[node name="Wheel4" type="Node3D" parent="SimView/View/World/CubeSat/Physics/Wheels" groups=["wheel"]]
+transform = Transform3D(-4.37114e-08, -0.529919, -0.848048, 0, 0.848048, -0.529919, 1, -2.31635e-08, -3.70694e-08, -0.324512, 0.6571, -1.25987)
+script = ExtResource("9_j7yxd")
+
+[node name="wheel4_model" parent="SimView/View/World/CubeSat/Physics/Wheels/Wheel4" instance=ExtResource("13_roewg")]
+transform = Transform3D(-4.37114e-08, 0, 1, -0.529919, 0.848048, -2.31635e-08, -0.848048, -0.529919, -3.70694e-08, 1.25987, -1.40766, 0.496943)
+
+[connection signal="pressed" from="UserInterface/DisturbanceUI/Randomize" to="UserInterface/DisturbanceUI" method="_on_randomize_pressed"]

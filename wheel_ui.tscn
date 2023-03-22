@@ -1,11 +1,11 @@
 [gd_scene load_steps=2 format=3 uid="uid://c67ruvyiuhsk2"]
 
-[ext_resource type="Script" path="res://wheel_slider.gd" id="1_jd0x8"]
+[ext_resource type="Script" path="res://wheel_ui.gd" id="1_efnin"]
 
-[node name="WheelSlider" type="HBoxContainer"]
+[node name="WheelUi" type="HBoxContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_jd0x8")
+script = ExtResource("1_efnin")
 
 [node name="ID" type="Label" parent="."]
 layout_mode = 2

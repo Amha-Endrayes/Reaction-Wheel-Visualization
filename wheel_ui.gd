@@ -1,5 +1,7 @@
 extends HBoxContainer
+# UI for representing a single reaction wheel
 
+# The reaction wheel to represent
 var wheel: Node3D
 
 func init(_wheel: Node):
@@ -33,7 +35,6 @@ func _on_minus_button_up():
 
 func _on_plus_button_up():
 	wheel.acceleration = 0 # Replace with function body.
-
 
 func _on_disable_toggled(button_pressed):
 	wheel.enabled = button_pressed
