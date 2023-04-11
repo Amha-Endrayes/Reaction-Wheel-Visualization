@@ -9,7 +9,7 @@ func _process(_delta):
 func _draw():
 	for vector in DebugDraw.vectors:
 		vector.draw(self, $View.get_camera_3d())
-	#DebugDraw.vectors.clear()
+	DebugDraw.vectors.clear()
 
 func _input(event):
 	# Camera Control      

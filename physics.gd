@@ -14,10 +14,8 @@ func _process(delta):
 	if not global_body_velocity.is_zero_approx():
 		rotate(global_body_velocity.normalized(), delta * global_body_velocity.length())
 	
-	#tmp += 1
-	#if (tmp % 10 == 0):
-	#	DebugDraw.draw_vector(global_position, global_body_velocity * 0.5, Color.GREEN)
-	#	DebugDraw.draw_vector(global_position, global_target * 2, Color.RED)
+	DebugDraw.draw_vector(global_position, global_body_velocity * 0.5, Color.GREEN)
+	DebugDraw.draw_vector(global_position, global_target * 2, Color.RED)
 
 func get_global_wheel_momentum() -> Vector3:
 	var global_momentum: Vector3 = Vector3.ZERO
